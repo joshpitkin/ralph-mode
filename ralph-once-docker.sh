@@ -29,7 +29,7 @@ docker run --rm -it \
     echo \"\$GH_TOKEN\" | gh auth login --with-token
     
     # Run the copilot command
-    copilot --model $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
+    copilot $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \

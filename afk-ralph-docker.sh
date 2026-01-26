@@ -34,7 +34,7 @@ for ((i=1; i<=$ITERATIONS; i++)); do
       echo \"\$GH_TOKEN\" | gh auth login --with-token
       
       # Run the copilot command
-      copilot --model $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
+      copilot $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \
