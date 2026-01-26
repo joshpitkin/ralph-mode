@@ -6,7 +6,6 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ITERATIONS=$1
 MODEL="${2:-}"
 MODEL_FLAG=""
@@ -25,7 +24,7 @@ for ((i=1; i<=$ITERATIONS; i++)); do
   echo "Iteration $i of $ITERATIONS..."
   
   result=$(docker run --rm \
-    -v "$SCRIPT_DIR:/workspace" \
+    -v "$PWD:/workspace" \
     -w /workspace \
     -e GH_TOKEN="${GH_TOKEN}" \
     ralph-copilot:latest \

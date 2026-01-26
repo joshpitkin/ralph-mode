@@ -3,8 +3,6 @@
 # Ralph-once with Docker isolation
 # This runs a single iteration inside a Docker container
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 # Optional model parameter
 MODEL="${1:-}"
 MODEL_FLAG=""
@@ -20,7 +18,7 @@ if [ -z "$GH_TOKEN" ]; then
 fi
 
 docker run --rm -it \
-  -v "$SCRIPT_DIR:/workspace" \
+  -v "$PWD:/workspace" \
   -w /workspace \
   -e GH_TOKEN="${GH_TOKEN}" \
   ralph-copilot:latest \
