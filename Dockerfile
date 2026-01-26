@@ -27,6 +27,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
+# Install common Node.js development tools globally (as root)
+RUN npm install -g \
+    typescript \
+    eslint \
+    prettier \
+    ts-node \
+    playwright
+
 # Install dependencies for Playwright and headless browsers
 RUN apt-get update && apt-get install -y \
     libnss3 \
@@ -101,17 +109,8 @@ WORKDIR /workspace
 # Note: This will fail without authentication, but prepares the environment
 RUN gh extension install github/gh-copilot || true
 
-# Install common Node.js development tools
-RUN npm install -g \
-    typescript \
-    eslint \
-    prettier \
-    ts-node \
-    playwright
-
-# Install Playwright browsers (Chromium, Firefox, WebKit)
-RUN npx playwright install chromium && \
-    npx playwright install-deps chromium
+# Install Playwright browsers as agent user
+RUN npx playwright install chromium
 
 # Verify Playwright installation
 RUN npx playwright --version
