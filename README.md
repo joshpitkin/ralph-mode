@@ -16,7 +16,7 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 
 ## Setup
 
-1. Create a PRD (Product Requirements Document) named `PRD.md` with your project goals
+1. Create a PRD (Product Requirements Document) named `prd.json` with your project goals
 2. Create an empty progress tracker: `touch progress.txt`
 3. Make scripts executable: `chmod +x *.sh`
 
@@ -71,8 +71,9 @@ Both modes will:
 - Uses `gh copilot suggest` instead of `claude`
 - Docker sandbox option available but GitHub Copilot CLI is not officially supported by Docker Sandboxes (we use standard Docker containers instead)
 - No `--permission-mode` flag (GitHub Copilot CLI is interactive by default)
-- File context passed via `@file.md` syntax
+- File context passed via `@file` syntax (supports both .md and .json formats)
 - Both local and Docker execution modes available
+- Uses `prd.json` instead of `PRD.md` for structured task tracking
 
 ## Docker Customization
 

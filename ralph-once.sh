@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gh copilot suggest "@PRD.md @progress.txt \
+gh copilot suggest "@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \

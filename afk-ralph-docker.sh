@@ -16,7 +16,7 @@ for ((i=1; i<=$1; i++)); do
     -w /workspace \
     -e GH_TOKEN="${GH_TOKEN}" \
     ralph-copilot:latest \
-    bash -c 'gh copilot suggest "@PRD.md @progress.txt \
+    bash -c 'gh copilot suggest "@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \

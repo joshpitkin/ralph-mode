@@ -9,7 +9,7 @@ fi
 for ((i=1; i<=$1; i++)); do
   echo "Iteration $i of $1..."
   
-  result=$(gh copilot suggest "@PRD.md @progress.txt \
+  result=$(gh copilot suggest "@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \

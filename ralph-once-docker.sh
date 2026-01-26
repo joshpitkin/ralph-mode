@@ -10,7 +10,7 @@ docker run --rm -it \
   -w /workspace \
   -e GH_TOKEN="${GH_TOKEN}" \
   ralph-copilot:latest \
-  bash -c 'gh copilot suggest "@PRD.md @progress.txt \
+  bash -c 'gh copilot suggest "@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \
