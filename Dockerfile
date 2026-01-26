@@ -105,9 +105,12 @@ RUN mkdir -p /var/lib/postgresql/data && \
 USER agent
 WORKDIR /workspace
 
-# Install GitHub Copilot CLI extension (will need authentication at runtime)
-# Note: This will fail without authentication, but prepares the environment
-RUN gh extension install github/gh-copilot || true
+# Install GitHub Copilot CLI extension
+# This can be installed without authentication
+RUN gh extension install github/gh-copilot
+
+# Verify GitHub Copilot CLI is installed
+RUN gh copilot --version || echo "GitHub Copilot CLI installed but requires authentication to use"
 
 # Install Playwright browsers as agent user
 RUN npx playwright install chromium
