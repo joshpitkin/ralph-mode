@@ -11,7 +11,7 @@ ITERATIONS=$1
 MODEL="${2:-}"
 MODEL_FLAG=""
 if [ -n "$MODEL" ]; then
-  MODEL_FLAG="-m $MODEL"
+  MODEL_FLAG="--model $MODEL"
 fi
 
 # Check if GH_TOKEN is set
@@ -35,7 +35,7 @@ for ((i=1; i<=$ITERATIONS; i++)); do
       gh extension list | grep -q github/gh-copilot || gh extension install github/gh-copilot
       
       # Run the copilot command
-      gh copilot suggest $MODEL_FLAG \"@prd.json @progress.txt \
+      copilot $MODEL_FLAG -p \"@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \

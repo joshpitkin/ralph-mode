@@ -8,10 +8,10 @@ bash "$SCRIPT_DIR/setup-copilot.sh" || exit 1
 MODEL="${1:-}"
 MODEL_FLAG=""
 if [ -n "$MODEL" ]; then
-  MODEL_FLAG="-m $MODEL"
+  MODEL_FLAG="--model $MODEL"
 fi
 
-gh copilot suggest $MODEL_FLAG "@prd.json @progress.txt \
+copilot $MODEL_FLAG -p "@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \

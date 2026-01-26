@@ -25,7 +25,7 @@ else
 fi
 
 # Verify it works
-if gh copilot --version &> /dev/null; then
+if copilot --help &> /dev/null; then
     echo "✓ GitHub Copilot CLI is ready"
 else
     echo "Warning: GitHub Copilot CLI may not be properly configured"

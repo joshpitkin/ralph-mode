@@ -14,13 +14,13 @@ ITERATIONS=$1
 MODEL="${2:-}"
 MODEL_FLAG=""
 if [ -n "$MODEL" ]; then
-  MODEL_FLAG="-m $MODEL"
+  MODEL_FLAG="--model $MODEL"
 fi
 
 for ((i=1; i<=$ITERATIONS; i++)); do
   echo "Iteration $i of $ITERATIONS..."
   
-  result=$(gh copilot suggest $MODEL_FLAG "@prd.json @progress.txt \
+  result=$(copilot $MODEL_FLAG -p "@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \

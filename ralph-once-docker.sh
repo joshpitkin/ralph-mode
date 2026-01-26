@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODEL="${1:-}"
 MODEL_FLAG=""
 if [ -n "$MODEL" ]; then
-  MODEL_FLAG="-m $MODEL"
+  MODEL_FLAG="--model $MODEL"
 fi
 
 # Check if GH_TOKEN is set
@@ -30,7 +30,7 @@ docker run --rm -it \
     gh extension list | grep -q github/gh-copilot || gh extension install github/gh-copilot
     
     # Run the copilot command
-    gh copilot suggest $MODEL_FLAG \"@prd.json @progress.txt \
+    copilot $MODEL_FLAG -p \"@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \
