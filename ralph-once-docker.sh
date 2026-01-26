@@ -32,5 +32,6 @@ docker run --rm -it \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \
 4. Update progress.txt with what you did. \
+5. Update the prd.json with passes:true if the task is fully complete. \
 ONLY DO ONE TASK AT A TIME.\"
   "
