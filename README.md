@@ -13,9 +13,10 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 1. Install Docker Desktop 4.50+ from [docker.com](https://docs.docker.com/desktop/)
 2. Build the custom template with your GitHub token:
    ```bash
-   docker build --build-arg GH_TOKEN=$(gh auth token) -t ralph-copilot:latest .
+   export GH_TOKEN=$(gh auth token)
+   docker build --build-arg GH_TOKEN="$GH_TOKEN" -t ralph-copilot:latest .
    ```
-3. Set your GitHub token for runtime: `export GH_TOKEN=$(gh auth token)`
+3. The token is now embedded in the image for authentication
 
 ## Setup
 
