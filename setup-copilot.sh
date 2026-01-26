@@ -15,13 +15,13 @@ if ! gh auth status &> /dev/null; then
     exit 1
 fi
 
-# Check if copilot extension is installed
-if ! gh extension list | grep -q "github/gh-copilot"; then
-    echo "Installing GitHub Copilot CLI extension..."
-    gh extension install github/gh-copilot
-    echo "✓ GitHub Copilot CLI extension installed"
+# Check if copilot is installed via npm
+if ! command -v copilot &> /dev/null; then
+    echo "Installing GitHub Copilot CLI via npm..."
+    npm install -g @github/copilot
+    echo "✓ GitHub Copilot CLI installed"
 else
-    echo "✓ GitHub Copilot CLI extension already installed"
+    echo "✓ GitHub Copilot CLI already installed"
 fi
 
 # Verify it works

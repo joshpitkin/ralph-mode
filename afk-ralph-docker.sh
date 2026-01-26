@@ -30,9 +30,9 @@ for ((i=1; i<=$ITERATIONS; i++)); do
     -e GH_TOKEN="${GH_TOKEN}" \
     ralph-copilot:latest \
     bash -c "
-      # Authenticate and install copilot extension (if not already done)
+      # Authenticate and install copilot (if not already done)
       echo \"\$GH_TOKEN\" | gh auth login --with-token
-      gh extension list | grep -q github/gh-copilot || gh extension install github/gh-copilot
+      command -v copilot &> /dev/null || npm install -g @github/copilot
       
       # Run the copilot command
       copilot $MODEL_FLAG -p \"@prd.json @progress.txt \
