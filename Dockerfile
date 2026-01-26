@@ -7,6 +7,9 @@ FROM ubuntu:22.04
 # Set non-interactive to avoid prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Accept GitHub token as build argument
+ARG GH_TOKEN
+
 # Install system dependencies
 USER root
 RUN apt-get update && apt-get install -y \
@@ -105,12 +108,16 @@ RUN mkdir -p /var/lib/postgresql/data && \
 USER agent
 WORKDIR /workspace
 
-# Install GitHub Copilot CLI extension
-# This can be installed without authentication
+# Authenticate with GitHub using the provided token
+RUN if [ -n "$GH_TOKEN" ]; then \
+        echo "$GH_TOKEN" | gh auth login --with-token; \
+    fi
+
+# Install GitHub Copilot CLI extension (requires authentication)
 RUN gh extension install github/gh-copilot
 
 # Verify GitHub Copilot CLI is installed
-RUN gh copilot --version || echo "GitHub Copilot CLI installed but requires authentication to use"
+RUN gh copilot --version
 
 # Install Playwright browsers as agent user
 RUN npx playwright install chromium

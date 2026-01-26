@@ -11,8 +11,11 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 
 ### Option 2: Docker Container (Isolated)
 1. Install Docker Desktop 4.50+ from [docker.com](https://docs.docker.com/desktop/)
-2. Build the custom template: `docker build -t ralph-copilot:latest .`
-3. Set your GitHub token: `export GH_TOKEN=$(gh auth token)`
+2. Build the custom template with your GitHub token:
+   ```bash
+   docker build --build-arg GH_TOKEN=$(gh auth token) -t ralph-copilot:latest .
+   ```
+3. Set your GitHub token for runtime: `export GH_TOKEN=$(gh auth token)`
 
 ## Setup
 
