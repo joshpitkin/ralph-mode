@@ -1,6 +1,17 @@
 #!/bin/bash
 
-gh copilot suggest "@prd.json @progress.txt \
+# Ensure GitHub Copilot CLI is set up
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash "$SCRIPT_DIR/setup-copilot.sh" || exit 1
+
+# Optional model parameter
+MODEL="${1:-}"
+MODEL_FLAG=""
+if [ -n "$MODEL" ]; then
+  MODEL_FLAG="-m $MODEL"
+fi
+
+gh copilot suggest $MODEL_FLAG "@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \

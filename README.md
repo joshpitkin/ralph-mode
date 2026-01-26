@@ -11,12 +11,14 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 
 ### Option 2: Docker Container (Isolated)
 1. Install Docker Desktop 4.50+ from [docker.com](https://docs.docker.com/desktop/)
-2. Build the custom template with your GitHub token:
+2. Build the custom template:
+   ```bash
+   docker build -t ralph-copilot:latest .
+   ```
+3. Set your GitHub token for runtime:
    ```bash
    export GH_TOKEN=$(gh auth token)
-   docker build --build-arg GH_TOKEN="$GH_TOKEN" -t ralph-copilot:latest .
    ```
-3. The token is now embedded in the image for authentication
 
 ## Setup
 
@@ -31,7 +33,13 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 #### Human-in-the-loop (recommended for first runs)
 
 ```bash
-./ralph-once.sh
+./ralph-once.sh [model]
+```
+
+Examples:
+```bash
+./ralph-once.sh              # Use default model
+./ralph-once.sh gpt-4        # Use specific model
 ```
 
 Run this script, review what happens, then run again. This helps you understand how the loop works.
@@ -39,7 +47,13 @@ Run this script, review what happens, then run again. This helps you understand 
 #### Automated Loop
 
 ```bash
-./afk-ralph.sh 20
+./afk-ralph.sh <iterations> [model]
+```
+
+Examples:
+```bash
+./afk-ralph.sh 20            # 20 iterations with default model
+./afk-ralph.sh 20 gpt-4      # 20 iterations with GPT-4
 ```
 
 ### Docker Execution (Isolated Sandbox)
@@ -47,14 +61,16 @@ Run this script, review what happens, then run again. This helps you understand 
 #### Human-in-the-loop
 
 ```bash
-./ralph-once-docker.sh
+./ralph-once-docker.sh [model]
 ```
 
 #### Automated Loop
 
 ```bash
-./afk-ralph-docker.sh 20
+./afk-ralph-docker.sh <iterations> [model]
 ```
+
+Note: Docker scripts require `GH_TOKEN` to be set (see prerequisites above).
 
 Both modes will:
 - Pick the next task from your PRD
@@ -69,6 +85,34 @@ Both modes will:
 - Reproducible setup across team members
 - Can safely install packages and run tests
 - Easy to reset (just rebuild the image)
+
+## Available Models
+
+You can specify different AI models when running the scripts. Common models include:
+
+### OpenAI Models
+- `gpt-4` - GPT-4 (most capable)
+- `gpt-4-turbo` - GPT-4 Turbo (faster, cheaper)
+- `gpt-3.5-turbo` - GPT-3.5 Turbo (faster, budget option)
+
+### Claude Models (Anthropic)
+- `claude-3.5-sonnet` - Claude 3.5 Sonnet (recommended, balanced performance)
+- `claude-3-opus` - Claude 3 Opus (most capable)
+- `claude-3-sonnet` - Claude 3 Sonnet
+- `claude-3-haiku` - Claude 3 Haiku (fastest, budget option)
+
+### Usage Examples
+```bash
+# Use Claude Sonnet
+./ralph-once.sh claude-3.5-sonnet
+./afk-ralph.sh 20 claude-3.5-sonnet
+
+# Use GPT-4
+./ralph-once.sh gpt-4
+./afk-ralph-docker.sh 20 gpt-4
+```
+
+**Note:** Model availability depends on your GitHub Copilot subscription level. If a model is not available, the script will use the default model or return an error.
 
 ## Key Differences from Original Ralph
 
