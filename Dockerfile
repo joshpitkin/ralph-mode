@@ -33,7 +33,8 @@ RUN npm install -g \
     eslint \
     prettier \
     ts-node \
-    playwright
+    playwright \
+    @github/copilot
 
 # Install dependencies for Playwright and headless browsers
 RUN apt-get update && apt-get install -y \

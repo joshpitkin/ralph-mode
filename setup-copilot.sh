@@ -15,7 +15,7 @@ if ! gh auth status &> /dev/null; then
     exit 1
 fi
 
-# Check if copilot is installed via npm
+# Check if copilot is installed
 if ! command -v copilot &> /dev/null; then
     echo "Installing GitHub Copilot CLI via npm..."
     npm install -g @github/copilot

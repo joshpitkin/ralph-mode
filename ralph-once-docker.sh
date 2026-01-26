@@ -25,12 +25,11 @@ docker run --rm -it \
   -e GH_TOKEN="${GH_TOKEN}" \
   ralph-copilot:latest \
   bash -c "
-    # Authenticate and install copilot
+    # Authenticate with GitHub
     echo \"\$GH_TOKEN\" | gh auth login --with-token
-    command -v copilot &> /dev/null || npm install -g @github/copilot
     
     # Run the copilot command
-    copilot $MODEL_FLAG -p \"@prd.json @progress.txt \
+    copilot --model $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
 1. Read the PRD and progress file. \
 2. Find the next incomplete task and implement it. \
 3. Commit your changes. \

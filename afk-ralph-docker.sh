@@ -30,12 +30,11 @@ for ((i=1; i<=$ITERATIONS; i++)); do
     -e GH_TOKEN="${GH_TOKEN}" \
     ralph-copilot:latest \
     bash -c "
-      # Authenticate and install copilot (if not already done)
+      # Authenticate with GitHub
       echo \"\$GH_TOKEN\" | gh auth login --with-token
-      command -v copilot &> /dev/null || npm install -g @github/copilot
       
       # Run the copilot command
-      copilot $MODEL_FLAG -p \"@prd.json @progress.txt \
+      copilot --model $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
   1. Find the highest-priority task and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \
