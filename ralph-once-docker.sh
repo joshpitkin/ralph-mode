@@ -29,7 +29,7 @@ docker run --rm -it \
     # Run the copilot command
     copilot $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
 1. Read the PRD and progress file. \
-2. Find the next incomplete task and implement it. \
+2. Find the next incomplete task with the lowest priority number and implement it. \
 3. Commit your changes. \
 4. Update progress.txt with what you did. \
 5. Update the prd.json with passes:true if the task is fully complete. \
