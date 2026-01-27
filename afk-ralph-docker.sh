@@ -23,7 +23,9 @@ fi
 for ((i=1; i<=$ITERATIONS; i++)); do
   echo "Iteration $i of $ITERATIONS..."
   
-  result=$(docker run --rm \
+  # Run docker with -t for terminal output, capture output to temp file
+  TEMP_OUTPUT=$(mktemp)
+  docker run --rm -t \
     -v "$PWD:/workspace" \
     -w /workspace \
     -e GH_TOKEN="${GH_TOKEN}" \
@@ -42,14 +44,15 @@ for ((i=1; i<=$ITERATIONS; i++)); do
   6. Update the prd.json with passes:true if the task is fully complete. \
   ONLY WORK ON A SINGLE TASK. \
   If the PRD is complete, output <promise>COMPLETE</promise>.\"
-    ")
-
-  echo "$result"
-
-  if [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
+    " | tee "$TEMP_OUTPUT"
+  
+  # Check for completion in captured output
+  if grep -q "<promise>COMPLETE</promise>" "$TEMP_OUTPUT"; then
+    rm "$TEMP_OUTPUT"
     echo "PRD complete after $i iterations."
     exit 0
   fi
+  rm "$TEMP_OUTPUT"
 done
 
 echo "Completed $ITERATIONS iterations. Check progress.txt for status."
