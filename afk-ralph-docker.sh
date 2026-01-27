@@ -36,7 +36,7 @@ for ((i=1; i<=$ITERATIONS; i++)); do
       
       # Run the copilot command
       copilot $MODEL_FLAG --yolo -p \"@prd.json @progress.txt \
-  1. Find the next incomplete task with the lowest priority number and implement it. \
+  1. Use jq to find the next task in the @prd.json file.  Filter for incomplete tasks (passes :false) and sort by priority ascending.  Take the first one you find and implement it. \
   2. Run your tests and type checks. \
   3. Update the PRD with what was done. \
   4. Append your progress to progress.txt. \
