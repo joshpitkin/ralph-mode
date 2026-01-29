@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     vim \
     sqlite3 \
     libsqlite3-dev \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 20 LTS

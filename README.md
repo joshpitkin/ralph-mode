@@ -26,6 +26,29 @@ These scripts are adapted from the [Ralph technique](https://www.aihero.dev/gett
 2. Create an empty progress tracker: `touch progress.txt`
 3. Make scripts executable: `chmod +x *.sh`
 
+## Optional: Shell Aliases
+
+For convenience, you can add aliases to your `~/.zshrc` (or `~/.bashrc` for bash):
+
+```bash
+# Ralph mode aliases
+alias ralph-afk='bash /path/where/repo/was/cloned/ralph-mode/afk-ralph-docker.sh'
+alias ralph-once='bash /path/where/repo/was/cloned/ralph-mode/ralph-once-docker.sh'
+alias ralph-tasks='node /path/where/repo/was/cloned/ralph-mode/manage-tasks.js'
+```
+
+Then reload your shell:
+```bash
+source ~/.zshrc
+```
+
+Now you can use short commands from anywhere:
+- `ralph-afk <iterations> [model]` - Run multiple iterations
+- `ralph-once [model]` - Run a single iteration  
+- `ralph-tasks` - View task summary from any directory with a prd.json
+
+**Note:** Update the paths in the aliases to match your actual installation directory.
+
 ## Usage
 
 ### Local Execution (No Isolation)
@@ -96,6 +119,7 @@ You can specify different AI models when running the scripts. Common models incl
 - `gpt-3.5-turbo` - GPT-3.5 Turbo (faster, budget option)
 
 ### Claude Models (Anthropic)
+- `claude-sonnet-4.5` - Claude 4.5 Sonnet (recommended, balanced performance)
 - `claude-3.5-sonnet` - Claude 3.5 Sonnet (recommended, balanced performance)
 - `claude-3-opus` - Claude 3 Opus (most capable)
 - `claude-3-sonnet` - Claude 3 Sonnet
