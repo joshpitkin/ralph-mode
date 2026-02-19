@@ -30,7 +30,7 @@ const findLineNumber = (id) => {
 const requirements = data.requirements
   .map((req) => ({
     id: req.id,
-    category: req.category,
+    category: req.category || req.title,
     passes: req.passes,
     priority: req.priority,
     lineNumber: findLineNumber(req.id)

@@ -59,10 +59,18 @@ Now you can use short commands from anywhere:
 ./ralph-once.sh [model]
 ```
 
+You can optionally add extra instructions without editing the scripts:
+
+- Create a file named `ralph-extra.md` in your project folder (auto-loaded if present)
+- Or pass inline text via `RALPH_EXTRA` (env var)
+- Or pass a one-off extra instruction as the next positional argument
+
 Examples:
 ```bash
 ./ralph-once.sh              # Use default model
 ./ralph-once.sh gpt-4        # Use specific model
+RALPH_EXTRA="Focus on adding tests first." ./ralph-once.sh gpt-4
+./ralph-once.sh gpt-4 "Prefer minimal diffs; avoid refactors."
 ```
 
 Run this script, review what happens, then run again. This helps you understand how the loop works.
@@ -77,6 +85,8 @@ Examples:
 ```bash
 ./afk-ralph.sh 20            # 20 iterations with default model
 ./afk-ralph.sh 20 gpt-4      # 20 iterations with GPT-4
+RALPH_EXTRA="Run lint before tests; stop on failure." ./afk-ralph.sh 20 gpt-4
+./afk-ralph.sh 20 gpt-4 "Keep commits small and descriptive."
 ```
 
 ### Docker Execution (Isolated Sandbox)
@@ -93,7 +103,15 @@ Examples:
 ./afk-ralph-docker.sh <iterations> [model]
 ```
 
+Optional args supported in Docker loop mode:
+
+```bash
+./afk-ralph-docker.sh <iterations> [model] [prd_id] [extra_instructions]
+```
+
 Note: Docker scripts require `GH_TOKEN` to be set (see prerequisites above).
+
+Extra instructions work in Docker mode too (same `ralph-extra.md` and `RALPH_EXTRA` support).
 
 Both modes will:
 - Pick the next task from your PRD

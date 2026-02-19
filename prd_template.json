@@ -1,0 +1,22 @@
+{
+  "project": "string",
+  "version": "1.0.0",
+  "lastUpdated": "date",
+  "requirements": [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string",
+      "acceptanceCriteria": [
+        "string"
+      ],
+      "stepsToVerify": [
+        "string"
+      ],
+      "passes": true,
+      "priority": 1,
+      "priorityRationale": "string"
+    }
+  ]
+}
+  
