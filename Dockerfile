@@ -36,10 +36,13 @@ RUN apt-get update && apt-get install -y \
     librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 20 LTS
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+# Install Node.js 24.x
+RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
+
+# Enable Corepack and preinstall pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Install common Node.js development tools globally (as root)
 RUN npm install -g \
