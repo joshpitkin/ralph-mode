@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     build-essential \
+    pkg-config \
     ca-certificates \
     gnupg \
     sudo \
@@ -21,6 +22,18 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev \
     jq \
+    # Rust/Tauri build deps
+    clang \
+    cmake \
+    libssl-dev \
+    patchelf \
+    # Tauri (wry) Linux WebView deps (Ubuntu 22.04 uses WebKitGTK 4.0 + libsoup2)
+    libgtk-3-dev \
+    libwebkit2gtk-4.0-dev \
+    libjavascriptcoregtk-4.0-dev \
+    libsoup2.4-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 20 LTS
@@ -107,6 +120,14 @@ RUN mkdir -p /var/lib/postgresql/data && \
 USER agent
 WORKDIR /workspace
 
+# Rust toolchain (installed as non-root)
+ENV CARGO_HOME=/home/agent/.cargo
+ENV RUSTUP_HOME=/home/agent/.rustup
+ENV PATH="/home/agent/.cargo/bin:/home/agent/.local/bin:${PATH}"
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable && \
+    rustup component add rustfmt clippy rust-src
+
 # Note: GitHub Copilot CLI extension will be installed at runtime
 # This avoids passing sensitive tokens during build
 
@@ -118,7 +139,6 @@ RUN npx playwright --version
 
 # Set default shell
 ENV SHELL=/bin/bash
-ENV PATH="/home/agent/.local/bin:${PATH}"
 
 # Add helpful aliases for database management and browser testing
 RUN echo 'alias start-postgres="sudo service postgresql start"' >> ~/.bashrc && \
