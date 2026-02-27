@@ -51,7 +51,11 @@ RUN npm install -g \
     prettier \
     ts-node \
     playwright \
-    @github/copilot
+    @github/copilot \
+    @upstash/context7-mcp \
+    @playwright/mcp \
+    chrome-devtools-mcp \
+    firecrawl-mcp
 
 # Install dependencies for Playwright and headless browsers
 RUN apt-get update && apt-get install -y \
@@ -139,6 +143,35 @@ RUN npx playwright install chromium
 
 # Verify Playwright installation
 RUN npx playwright --version
+
+# Set up Copilot CLI configuration: MCP servers and global instructions
+COPY --chown=agent:agent copilot-instructions.md /home/agent/.config/github-copilot/copilot-instructions.md
+RUN mkdir -p /home/agent/.config/github-copilot && \
+    cat > /home/agent/.config/github-copilot/mcp.json << 'EOF'
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp", "--headless", "--no-sandbox"]
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest", "--headless"]
+    },
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    }
+  }
+}
+EOF
 
 # Set default shell
 ENV SHELL=/bin/bash

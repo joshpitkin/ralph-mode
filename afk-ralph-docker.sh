@@ -67,11 +67,16 @@ for ((i=1; i<=$ITERATIONS; i++)); do
     -w /workspace \
     -e GH_TOKEN="${GH_TOKEN}" \
     -e RALPH_PROMPT="$PROMPT" \
+    ${FIRECRAWL_API_KEY:+-e FIRECRAWL_API_KEY="${FIRECRAWL_API_KEY}"} \
     ralph-copilot:latest \
     bash -c "
       # Authenticate with GitHub
       echo \"\$GH_TOKEN\" | gh auth login --with-token
-      
+
+      # Seed global Copilot instructions into workspace if not already present
+      mkdir -p /workspace/.github
+      cp -n ~/.config/github-copilot/copilot-instructions.md /workspace/.github/copilot-instructions.md 2>/dev/null || true
+
       # Run the copilot command
       copilot $MODEL_FLAG --yolo -p \"\$RALPH_PROMPT\"
     " | tee "$TEMP_OUTPUT"
