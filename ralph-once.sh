@@ -29,15 +29,17 @@ fi
 if [ -n "$EXTRA_INSTRUCTIONS" ]; then
   PROMPT_LINES+=("Additional instructions:" "$EXTRA_INSTRUCTIONS")
 fi
-PROMPT_LINES+=(
-  "@prd.json @progress.txt"
-  "1. Read the PRD and progress file."
-  "2. Find the next incomplete task and implement it."
-  "3. Commit your changes."
-  "4. Update progress.txt with what you did."
-  "5. Update the prd.json with passes:true if the task is fully complete."
-  "ONLY DO ONE TASK AT A TIME."
-)
+# PROMPT_LINES+=(
+#  "@prd.json @progress.txt"
+#  "1. Read the PRD and progress file."
+#  "2. Find the next incomplete task and implement it."
+#  "3. Commit your changes."
+#  "4. Update progress.txt with what you did."
+#  "5. Update the prd.json with passes:true if the task is fully complete."
+#  "ONLY DO ONE TASK AT A TIME."
+#)
 PROMPT="$(printf '%s\n' "${PROMPT_LINES[@]}")"
 
-copilot $MODEL_FLAG -p "$PROMPT"
+echo $PROMPT
+
+copilot $MODEL_FLAG --yolo -p "$PROMPT"

@@ -1,6 +1,20 @@
 #!/bin/bash
 set -e
 
+# Run the Copilot afk loop inside an already-running ralph environment container.
+# Start the container first with: ./ralph-env-start.sh
+#
+# Usage: ./ralph-env-afk.sh <iterations> [model] [prd_id] [extra_instructions]
+
+# Derive the container name from the current project directory (must match ralph-env-start.sh)
+CONTAINER_NAME="ralph-$(basename "$PWD" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g')"
+
+if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+  echo "No running environment found for this project (expected container: $CONTAINER_NAME)."
+  echo "Start one with: ./ralph-env-start.sh"
+  exit 1
+fi
+
 if [ -z "$1" ]; then
   echo "Usage: $0 <iterations> [model] [prd_id] [extra_instructions]"
   exit 1
@@ -30,18 +44,11 @@ if [ -n "$EXTRA_ARG" ]; then
   fi
 fi
 
-# Check if GH_TOKEN is set
-if [ -z "$GH_TOKEN" ]; then
-  echo "Error: GH_TOKEN environment variable must be set"
-  echo "Run: export GH_TOKEN=\$(gh auth token)"
-  exit 1
-fi
-
 for ((i=1; i<=$ITERATIONS; i++)); do
   echo "Iteration $i of $ITERATIONS..."
 
   # Build the prompt fresh each iteration so STEERING.md changes take effect
-  # between loops without restarting the script.
+  # immediately without restarting the container.
   PROMPT_LINES=()
   if [ -f "STEERING.md" ]; then
     PROMPT_LINES+=("@STEERING.md")
@@ -65,28 +72,14 @@ for ((i=1; i<=$ITERATIONS; i++)); do
   )
   PROMPT="$(printf '%s\n' "${PROMPT_LINES[@]}")"
 
-  # Run docker with -t for terminal output, capture output to temp file
   TEMP_OUTPUT=$(mktemp)
-  docker run --rm -t \
-    -v "$PWD:/workspace" \
-    -w /workspace \
-    -e GH_TOKEN="${GH_TOKEN}" \
+  # Pass the prompt via environment variable to avoid shell quoting issues
+  # shellcheck disable=SC2086
+  docker exec -t -w /workspace \
     -e RALPH_PROMPT="$PROMPT" \
-    ${FIRECRAWL_API_KEY:+-e FIRECRAWL_API_KEY="${FIRECRAWL_API_KEY}"} \
-    ralph-copilot:latest \
-    bash -c "
-      # Authenticate with GitHub
-      echo \"\$GH_TOKEN\" | gh auth login --with-token
+    "$CONTAINER_NAME" \
+    bash -c "copilot $MODEL_FLAG --yolo -p \"\$RALPH_PROMPT\"" | tee "$TEMP_OUTPUT"
 
-      # Seed global Copilot instructions into workspace if not already present
-      mkdir -p /workspace/.github
-      cp -n ~/.config/github-copilot/copilot-instructions.md /workspace/.github/copilot-instructions.md 2>/dev/null || true
-
-      # Run the copilot command
-      copilot $MODEL_FLAG --yolo -p \"\$RALPH_PROMPT\"
-    " | tee "$TEMP_OUTPUT"
-  
-  # Check for completion in captured output
   if grep -q "<promise>COMPLETE</promise>" "$TEMP_OUTPUT"; then
     rm "$TEMP_OUTPUT"
     echo "PRD complete after $i iterations."

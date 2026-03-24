@@ -27,19 +27,29 @@ RUN apt-get update && apt-get install -y \
     cmake \
     libssl-dev \
     patchelf \
-    # Tauri (wry) Linux WebView deps (Ubuntu 22.04 uses WebKitGTK 4.0 + libsoup2)
+    # Tauri (wry) Linux WebView deps
     libgtk-3-dev \
-    libwebkit2gtk-4.0-dev \
     libjavascriptcoregtk-4.0-dev \
-    libsoup2.4-dev \
     libayatana-appindicator3-dev \
     librsvg2-dev \
+    # Tauri 2.x build deps (webkit2gtk 4.1 + libsoup 3)
+    libwebkit2gtk-4.1-dev \
+    libsoup-3.0-dev \
+    # WebDriver binary for tauri-driver integration
+    webkit2gtk-driver \
+    # D-Bus session (required by GLib/GTK/WebKit at runtime)
+    dbus-x11 \
+    # Headless display for GUI test execution
+    xvfb \
+    xauth \
+    libgles2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 24.x
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
     apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    && npm install -g pnpm
 
 # Enable Corepack and preinstall pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -134,6 +144,18 @@ ENV PATH="/home/agent/.cargo/bin:/home/agent/.local/bin:${PATH}"
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable && \
     rustup component add rustfmt clippy rust-src
+
+
+# ── tauri-driver + pre-create app-data dir ────────────────────────────────────
+# Pre-create ~/.local/share so later volume mounts (cargo cache, etc.) cannot
+# cause Docker to create this directory as root, which would prevent Tauri's
+# app-data plugin from writing its data directory at runtime.
+RUN mkdir -p "$HOME/.local/share" \
+ && . "$HOME/.cargo/env" && cargo install tauri-driver --version 2.0.5 --locked
+
+# WebKitWebDriver ships to /usr/bin — expose via env so wdio.conf.ts picks it up
+# without needing WEBKIT_DRIVER_PATH set at call-time.
+ENV WEBKIT_DRIVER_PATH=/usr/bin/WebKitWebDriver
 
 # Note: GitHub Copilot CLI extension will be installed at runtime
 # This avoids passing sensitive tokens during build
